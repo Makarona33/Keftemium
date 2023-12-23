@@ -299,12 +299,23 @@ class ResultFrame(ctk.CTkFrame):
         neoscore.render_image(None, mem, preserve_alpha=False)
         neoscore.shutdown()
 
-        image = Image.open(BytesIO(mem)).convert("RGBA")
+        # Change the size of the photo
+        image = Image.open(BytesIO(mem)).convert('RGBA')
         new_width = int(self.tabs_frame.winfo_width() * 100 / int(self.app.config.scaling.get().replace("%", "")))
         new_height = int(new_width * image.height / image.width)
         image = image.resize((new_width, new_height))
 
-        image = ctk.CTkImage(light_image=image, dark_image=image, size=(image.width, image.height))
+        # Transparent background
+        # noinspection PyTypeChecker
+        image_arr = numpy.asarray(image).copy()
+        image_arr[:, :, 3] = (255 - image_arr[:, :, :3].mean(axis=2)).astype(numpy.uint8)
+
+        image = Image.fromarray(image_arr)
+
+        # Dark image
+        dark_image = Image.fromarray(numpy.dstack((235 - image_arr[:, :, :3], image_arr[:, :, 3])))
+
+        image = ctk.CTkImage(light_image=image, dark_image=dark_image, size=(image.width, image.height))
         self.image_label.configure(image=image)
 
     def play_or_stop_midi(self):

@@ -1,9 +1,11 @@
+import customtkinter as ctk
+from PIL import ImageTk
+
 from frames.home import HomeFrame
 from frames.navigation import NavigationFrame
 from frames.settings import SettingsFrame
 from tools.abs import AppABC
 from tools.config import Config
-import customtkinter as ctk
 
 
 class App(AppABC):
@@ -11,6 +13,11 @@ class App(AppABC):
         super().__init__(**kwargs)
 
         self.title("Keftemium")
+
+        self.iconbitmap()
+        # noinspection PyTypeChecker
+        self.iconphoto(True, ImageTk.PhotoImage(file="logo.png", master=self))
+
         self.geometry("1200x700")
         self.minsize(1200, 700)
 
