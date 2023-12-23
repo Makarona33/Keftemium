@@ -1,0 +1,8 @@
+customtkinter==5.2.1
+neoscore==0.1.13
+Pillow==10.1.0
+numpy==1.26.2
+PyAudio==0.2.14
+MIDIUtil==1.2.1
+scipy==1.11.4
+pygame==2.5.2
